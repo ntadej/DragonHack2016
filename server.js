@@ -26,28 +26,32 @@ app.use(function(req, res, next) {
 
 var dirs = ["l", "r", "f", "b", "s"];
 var listOfBroadcasts = {};
-var cars = {
-        "cars": [{
-            "id": 1,
-            "name": "Abraham"
-        }, {
-            "id": 2,
-            "name": "Oliver"
-        }]
-    }
-    /**
-     * Serves index.html on route '/'
-     */
+var initCars = {
+    "cars": []
+};
+var allCars = {
+    "cars": [{
+        "id": 1,
+        "name": "Abraham"
+    }, {
+        "id": 2,
+        "name": "Oliver"
+    }]
+};
+
+/**
+ * Serves index.html on route '/'
+ */
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
 app.get('/api/direction', function(req, res){
-    res.send(getRandomDir());
+    res.send('0123456789' + getRandomDir());
 });
 
 app.get('/api/cars', function(req, res) {
-    res.json(cars);
+    res.json(initCars);
 });
 
 app.get('/api/cars/1', function(req, res) {
@@ -90,6 +94,17 @@ io.on('connection', function(socket) {
         io.sockets.emit('action', msg);
     });
 
+    socket.on('initcar', function(msg){
+        var newCar;
+        allCars.cars.forEach(function(car){
+            if(car.name == msg){
+                initCars.cars.pushIfNotExist(car);
+                console.log(JSON.stringify(car));
+                console.log(JSON.stringify(initCars))
+            }
+        });
+    });
+
     /**
      * Sends test directions to client
      * over event called 'action'
@@ -116,3 +131,25 @@ require('./WebRTC-Scalable-Broadcast.js')(io);
 function getRandomDir(){
     return dirs[Math.floor(Math.random() * dirs.length)];
 }
+
+
+// check if an element exists in array using a comparer function
+// comparer : function(currentElement)
+Array.prototype.inArray = function(comparer) { 
+    for(var i=0; i < this.length; i++) { 
+        if(this[i] === comparer) return true; 
+    }
+    return false; 
+}; 
+
+// adds an element to the array if it does not already exist using a comparer 
+// function
+Array.prototype.pushIfNotExist = function(element, comparer) { 
+    if (!this.inArray(comparer)) {
+        this.push(element);
+    }
+};
+
+var testArray = [1,2];
+if(testArray.inArray(1))
+    console.log('y');
