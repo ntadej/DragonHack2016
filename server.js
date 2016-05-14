@@ -31,6 +31,10 @@ app.get('/api/cars', function(req, res){
     res.json(cars);
 });
 
+app.get('/api/direction', function(req, res){
+    res.send(getRandomDir());
+});
+
 app.get('/api/cars/1', function(req, res){
     res.json(cars.cars[0]);
 });
@@ -74,7 +78,7 @@ io.on('connection', function(socket){
      * l = left; r = right; f = forward; b = back; s = stop
      */
     setInterval(function(){
-        var dir = dirs[Math.floor(Math.random()*dirs.length)];
+        var dir = getRandomDir();
 
         io.sockets.emit('action', dir);
     }, 7000);
@@ -89,3 +93,7 @@ http.listen(3000, function(){
  * WebRTC scalable server
  */
 require('./WebRTC-Scalable-Broadcast.js')(io);
+
+function getRandomDir(){
+    return dirs[Math.floor(Math.random()*dirs.length)];
+}
