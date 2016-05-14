@@ -1,8 +1,9 @@
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io').listen(http);
 
 var dirs = ["l", "r", "f", "b", "s"];
+var listOfBroadcasts = {};
 
 /**
  * Serves index.html on route '/'
@@ -10,7 +11,6 @@ var dirs = ["l", "r", "f", "b", "s"];
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/public/index.html');
 });
-
 
 /**
  * Listens to user connect event
@@ -45,6 +45,7 @@ io.on('connection', function(socket){
 
         io.sockets.emit('action', dir);
     }, 7000);
+
 });
 
 http.listen(3000, function(){
