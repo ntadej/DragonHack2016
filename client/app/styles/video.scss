@@ -1,0 +1,10 @@
+.driver-wrapper {
+    width:50%;
+    overflow: hidden;
+    float: left;
+}
+
+video.driver {
+    left:50%;
+    transform: translateX(-50%);
+}
