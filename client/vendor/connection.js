@@ -1,6 +1,7 @@
-var ConnectionInit = function(socket, $) {
+var ConnectionInit = function(socket, $, displayCallback) {
   // this RTCMultiConnection object is used to connect with existing users
   var connection = initRTCMultiConnection();
+  connection.displayCallback = displayCallback;
 
   // using single socket for RTCMultiConnection signaling
   var onMessageCallbacks = {};
@@ -8,6 +9,17 @@ var ConnectionInit = function(socket, $) {
   // initializing RTCMultiConnection constructor.
   function initRTCMultiConnection(userid) {
     var connection = new RTCMultiConnection();
+    connection.mediaConstraints = {
+      mandatory: {
+        maxHeight: 480,
+        maxWidth: 640
+      }
+    }
+    connection.getExternalIceServers = false;
+    connection.iceServers = [];
+
+    console.log(connection.iceServers);
+
     connection.body = $('#videos-container');
     connection.channel = connection.sessionid = connection.userid = userid || connection.userid;
     connection.sdpConstraints.mandatory = {
@@ -41,8 +53,7 @@ var ConnectionInit = function(socket, $) {
   connection.getExternalIceServers = false;
 
   connection.onstream = function(event) {
-    console.log($('#videos-container'), event.mediaElement);
-    $('#videos-container').append(event.mediaElement);
+    connection.displayCallback(event);
 
     if (connection.isInitiator === false && !connection.broadcastingConnection) {
       // "connection.broadcastingConnection" global-level object is used
