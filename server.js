@@ -1,15 +1,48 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io').listen(http);
+var fs = require('fs');
 
 var dirs = ["l", "r", "f", "b", "s"];
 var listOfBroadcasts = {};
-
+var cars = 
+    {
+        "cars":
+            [
+                {
+                    "id": 1,
+                    "name": "Abraham"
+                },
+                {
+                    "id": 2,
+                    "name": "Oliver"
+                }
+            ]
+    }
 /**
  * Serves index.html on route '/'
  */
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/public/index.html');
+});
+
+app.get('/api/cars', function(req, res){
+    res.json(cars);
+});
+
+app.get('/api/cars/1', function(req, res){
+    res.json(cars.cars[0]);
+});
+
+app.get('/api/cars/2', function(req, res){
+    res.json(cars.cars[1]);
+});
+
+app.use(express.static('public'));
+
+app.use(function(req, res){
+   res.redirect('/');
 });
 
 /**
@@ -18,7 +51,7 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
     console.log('a user connected');
 
-    /**
+    /**-
      * Listens to user disconnect 
      * event (default event)
      */
@@ -51,3 +84,8 @@ io.on('connection', function(socket){
 http.listen(3000, function(){
     console.log('*3000');
 });
+
+/**
+ * WebRTC scalable server
+ */
+require('./WebRTC-Scalable-Broadcast.js')(io);
