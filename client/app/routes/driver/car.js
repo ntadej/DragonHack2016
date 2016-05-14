@@ -11,9 +11,6 @@ export default Ember.Route.extend({
   },
 
   actions: {
-    didTransition: function() {
-      this.send('openOrJoin');
-    },
     openOrJoin: function() {
       const socket = this.get('socketIOService').socketFor('http://dragon.pyphy.com/');
       const controller = this.get('controller');
@@ -33,5 +30,25 @@ export default Ember.Route.extend({
         typeOfStreams: controller.get('connection').session
       });
     }
+  },
+
+  beforeModel() {
+    const socket = this.get('socketIOService').socketFor('http://dragon.pyphy.com/');
+
+    socket.on('connect', this.onConnect, this);
+    socket.on('action', (data) => {
+      //console.log(data);
+    });
+  },
+  onConnect() {
+    // const socket = this.get('socketIOService').socketFor('http://dragon.pyphy.com/');
+
+    console.log('Connect');
+  },
+
+  willDestroyElement() {
+    const socket = this.get('socketService').socketFor('http://dragon.pyphy.com/');
+    socket.off('connect', this.onConnect);
+    socket.off('message', this.onMessage);
   }
 });

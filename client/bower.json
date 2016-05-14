@@ -5,6 +5,8 @@
     "ember-cli-shims": "0.1.1",
     "ember-cli-test-loader": "0.2.2",
     "ember-qunit-notifications": "0.1.0",
-    "Skeleton-Sass": "skeleton-scss#*"
+    "Skeleton-Sass": "skeleton-scss#*",
+    "uri.js": "^1.18.0",
+    "socket.io-client": "^1.4.6"
   }
 }

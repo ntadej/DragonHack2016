@@ -7,7 +7,11 @@ const Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('car');
-  this.route('driver');
+  this.route('driver', function() {
+    this.route('car', {
+      path: ':car_id'
+    });
+  });
   this.route('spectator');
 });
 
