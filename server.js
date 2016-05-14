@@ -59,13 +59,19 @@ app.get('/api/cars', function(req, res) {
 
 app.get('/api/cars/1', function(req, res) {
     res.json({
-        "car": allCars.cars[0]
+        "car": initCars.cars[0]
     });
 });
 
 app.get('/api/cars/2', function(req, res) {
     res.json({
-        "car": allCars.cars[1]
+        "car": initCars.cars[1]
+    });
+});
+
+app.get('/api/cars/3', function(req, res) {
+    res.json({
+        "car": initCars.cars[2]
     });
 });
 
