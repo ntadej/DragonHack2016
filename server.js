@@ -2,6 +2,8 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var dirs = ["l", "r", "f", "b", "s"];
+
 /**
  * Serves index.html on route '/'
  */
@@ -29,15 +31,18 @@ io.on('connection', function(socket){
      */
     socket.on('test', function(msg){
         console.log(msg);
-    })
+    });
 
     /**
-     * Sends test message to client
-     * over event called 'servertest'
+     * Sends test directions to client
+     * over event called 'action'
+     *
+     * l = left; r = right; f = forward; b = back; s = stop
      */
     setInterval(function(){
-        console.log('y');
-        io.sockets.emit('servertest', {msg: 'server sent this'});
+        var dir = dirs[Math.floor(Math.random()*dirs.length)];
+
+        io.sockets.emit('action', {msg: dir});
     }, 1000);
 });
 
