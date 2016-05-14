@@ -27,14 +27,17 @@ app.use(function(req, res, next) {
 var dirs = ["l", "r", "f", "b", "s"];
 var listOfBroadcasts = {};
 var initCars = {
-    "cars": []
+    "cars": [{
+        "id": 1,
+        "name": "Maggie"
+    }]
 };
 var allCars = {
     "cars": [{
-        "id": 1,
+        "id": 2,
         "name": "Abraham"
     }, {
-        "id": 2,
+        "id": 3,
         "name": "Oliver"
     }]
 };
@@ -56,13 +59,13 @@ app.get('/api/cars', function(req, res) {
 
 app.get('/api/cars/1', function(req, res) {
     res.json({
-        "car": cars.cars[0]
+        "car": allCars.cars[0]
     });
 });
 
 app.get('/api/cars/2', function(req, res) {
     res.json({
-        "car": cars.cars[1]
+        "car": allCars.cars[1]
     });
 });
 
@@ -98,9 +101,9 @@ io.on('connection', function(socket) {
         var newCar;
         allCars.cars.forEach(function(car){
             if(car.name == msg){
-                initCars.cars.pushIfNotExist(car);
-                console.log(JSON.stringify(car));
-                console.log(JSON.stringify(initCars))
+                if(!initCars.cars.inArray(car))
+                    initCars.cars.push(car);
+                console.log(JSON.stringify(initCars));
             }
         });
     });
@@ -137,19 +140,7 @@ function getRandomDir(){
 // comparer : function(currentElement)
 Array.prototype.inArray = function(comparer) { 
     for(var i=0; i < this.length; i++) { 
-        if(this[i] === comparer) return true; 
+        if(this[i] == comparer) return true; 
     }
     return false; 
-}; 
-
-// adds an element to the array if it does not already exist using a comparer 
-// function
-Array.prototype.pushIfNotExist = function(element, comparer) { 
-    if (!this.inArray(comparer)) {
-        this.push(element);
-    }
 };
-
-var testArray = [1,2];
-if(testArray.inArray(1))
-    console.log('y');

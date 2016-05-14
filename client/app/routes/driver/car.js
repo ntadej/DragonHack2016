@@ -25,7 +25,7 @@ export default Ember.Route.extend({
       };
 
       socket.emit('join-broadcast', {
-        broadcastid: 'testId',
+        broadcastid: 'testDev',
         userid: controller.get('connection').userid,
         typeOfStreams: controller.get('connection').session
       });
