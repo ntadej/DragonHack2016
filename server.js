@@ -31,6 +31,7 @@ io.on('connection', function(socket){
      */
     socket.on('test', function(msg){
         console.log(msg);
+        io.sockets.emit('action', msg);
     });
 
     /**
@@ -42,8 +43,8 @@ io.on('connection', function(socket){
     setInterval(function(){
         var dir = dirs[Math.floor(Math.random()*dirs.length)];
 
-        io.sockets.emit('action', {msg: dir});
-    }, 1000);
+        io.sockets.emit('action', dir);
+    }, 7000);
 });
 
 http.listen(3000, function(){
