@@ -1,0 +1,14 @@
+{
+    "name": "DH",
+    "version": "1.0.0",
+    "description": "avtocek",
+    "dependencies": {
+        "express": "^4.13.0",
+        "express-session": "^1.11.3",
+        "socket.io": "1.4.6",
+        "lodash": "^3.10.0",
+        "q": "^1.4.1",
+        "request": "^2.58.0",
+        "rootpath": "^0.1.2"
+    }
+}
