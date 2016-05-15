@@ -103,6 +103,10 @@ app.get('/test', function(req, res){
     res.sendFile(__dirname + '/public/test.html');
 });
 
+app.get('/testgyro', function(req, res){
+    res.sendFile(__dirname + '/public/testgyro.html');
+});
+
 /**
  * Serves static files from public folder
  */

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <style type="text/css">
+        body {
+            padding-top: 100px;
+        }
+        .form-container {
+            width: 1024px;
+            margin: auto;
+        }
+        .credits {
+            border-top: 1px solid #ddd;
+            margin-top: 40px;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 style="font-size: 1000%; display:none" id="l">WU TANG AINT NOTHING TO FUCK WIT</h1>
+        <h1 style="font-size: 1000%; display:none" id="r">NIGGAS WITH ATTITUDES</h1>
+        <h2>Test</h2>
+        Alpha start: <span id="as"></span>
+        Beta start: <span id="bs"></span>
+        Gamma start: <span id="gs"></span>
+        <br>
+        Alpha current: <span id="ac"></span>
+        Beta current: <span id="bc"></span>
+        Gamma current: <span id="gc"></span>
+        <br>
+        Alpha diff: <span id="ad"></span>
+        Beta diff: <span id="bd"></span>
+        Gamma diff: <span id="gd"></span>
+    </div>
+
+    <div class="credits text-center">
+        <p>
+            <a href="http://wizard-poker.com">Chicks with dicks</a>
+        </p>
+        <p>
+            <a href="http://jasonwatmore.com">Some random guy I copied the code from</a>
+        </p>
+    </div>
+
+    <script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+    var degreesToChange = 25; // How much does the phone have to turn, to change the direction [°]
+    var firstPositionFlag = true; // Flag to know, if we need to set first position
+    var firstPosition; // First position. Direction change depends on this
+
+    var socket = io(document.href);
+    socket.on('action', function(msg){
+      console.log(msg);
+    });
+
+    // +/- 20
+
+    /**
+     * If DeviceMotionEvent == undefined, the
+     * device does not have gyroscope
+     */
+    if(window.DeviceMotionEvent==undefined){
+        console.log('Device does not support that shit')
+    }else{
+        window.ondevicemotion = function(event) {
+          ax = event.accelerationIncludingGravity.x
+          ay = event.accelerationIncludingGravity.y
+          az = event.accelerationIncludingGravity.z
+          rotation = event.rotationRate;
+          if (rotation != null) {
+            arAlpha = Math.round(rotation.alpha);
+            arBeta = Math.round(rotation.beta);
+            arGamma = Math.round(rotation.gamma);
+
+            /**
+             * For testing. Writes direction change
+             * to server console
+             */
+            /*socket.emit('directionChange', {
+              "alpha": arAlpha,
+              "beta": arBeta,
+              "gamma": arGamma
+            });*/
+
+            /**
+             * For production.
+             * 'directionChange' channel accepts 
+             * direction ('l', 'r', 'b', 'f', 's')
+             * and changes it on /api/direction
+             */
+            //socket.emit('directionChange', 'r');
+          }
+        }
+
+        /**
+         * This shit aint working
+         */
+        window.ondeviceorientation = function(event) {
+          var alpha = Math.round(event.alpha);
+          var beta = Math.round(event.beta);
+          var gamma = Math.round(event.gamma);
+
+          var alphaDiff, betaDiff, gammaDiff;
+
+          if(firstPositionFlag){
+            firstPositionFlag = false;
+            firstPosition = {
+              "alpha": alpha,
+              "beta": beta,
+              "gamma": gamma
+            }
+            $("#as").html(firstPosition.alpha);
+            $("#bs").html(firstPosition.beta);
+            $("#gs").html(firstPosition.gamma);
+
+          }else{
+            /**
+            * Hack cause it works otherwise it wouldnt
+            */
+            if(gamma >= 0){
+              alphaDiff = getDiff(firstPosition.alpha, alpha + 180);
+            }else{
+              alphaDiff = getDiff(firstPosition.alpha, alpha);
+            }
+            betaDiff = getDiff(firstPosition.beta, beta);
+            gammaDiff = getDiff(firstPosition.gamma, gamma);
+
+            if(alphaDiff > degreesToChange){
+              socket.emit('directionChange', 'l');
+              // Levo
+              $("#l").show();
+              $("#r").hide();
+            }else if(alphaDiff < -degreesToChange){
+              socket.emit('directionChange', 'r');
+              // Desno
+              $("#l").hide();
+              $("#r").show();
+            }else{
+              socket.emit('directionChange', 'f');
+              // Naprej
+              $("#l").hide();
+              $("#r").hide();
+            }
+          }
+
+          /*
+          socket.emit('directionChange', JSON.stringify({
+            "first alpha: ": firstPosition.alpha,
+            "now alpha: ": alpha
+          }));
+          */
+
+          $("#ac").html(alpha);
+          $("#bc").html(beta);
+          $("#gc").html(gamma);
+
+          $("#ad").html(alphaDiff);
+          $("#bd").html(betaDiff);
+          $("#gd").html(gammaDiff);
+
+          socket.emit('dirChange', JSON.stringify({
+            "alphaDiff": alphaDiff,
+            "betaDiff": betaDiff,
+            "gammaDiff": gammaDiff
+          }));
+
+          var str = 'alpha: ' + alpha + ' beta: ' + beta + ' gamma: ' + gamma; 
+          //socket.emit('directionChange', str);
+        }
+    }
+
+    function getDiff(pos1, pos2){   
+        return (pos2-pos1+540) % 360 - 180;
+    }
+    </script>
+</body>
+</html>
