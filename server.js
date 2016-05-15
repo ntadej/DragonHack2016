@@ -36,7 +36,7 @@ var directions = ["l", "r", "f", "b", "s"];
  * Current direction. This is displayed
  * on /api/direction at all times
  */
-var currentDirection = "s";
+var currentDirection = "r";
 
 var listOfBroadcasts = {};
 var initCars = {
