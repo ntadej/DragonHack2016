@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <style type="text/css">
+        body {
+            padding-top: 100px;
+        }
+        .form-container {
+            width: 400px;
+            margin: auto;
+        }
+        .credits {
+            border-top: 1px solid #ddd;
+            margin-top: 40px;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Test</h2>
+        42
+    </div>
+
+    <div class="credits text-center">
+        <p>
+            <a href="http://wizard-poker.com">Chicks with dicks</a>
+        </p>
+        <p>
+            <a href="http://jasonwatmore.com">Some random guy I copied the code from</a>
+        </p>
+    </div>
+
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+    var socket = io("localhost:3000");
+    socket.on('action', function(msg){
+      console.log(msg);
+    });
+
+    /**
+     * If DeviceMotionEvent == undefined, the
+     * device does not have gyroscope
+     */
+    if(window.DeviceMotionEvent==undefined){
+        console.log('Device does not support that shit')
+    }else{
+        window.ondevicemotion = function(event) {
+          ax = event.accelerationIncludingGravity.x
+          ay = event.accelerationIncludingGravity.y
+          az = event.accelerationIncludingGravity.z
+          rotation = event.rotationRate;
+          if (rotation != null) {
+            arAlpha = Math.round(rotation.alpha);
+            arBeta = Math.round(rotation.beta);
+            arGamma = Math.round(rotation.gamma);
+
+            /**
+             * For testing. Writes direction change
+             * to server console
+             */
+            socket.emit('directionChange', {
+              "alpha": arAlpha,
+              "beta": arBeta,
+              "gamma": arGamma
+            });
+
+            /**
+             * For production.
+             * 'directionChange' channel accepts 
+             * direction ('l', 'r', 'b', 'f', 's')
+             * and changes it on /api/direction
+             */
+            //socket.emit('directionChange', 'r');
+          }
+        }
+
+        /**
+         * This shit aint working
+         */
+        window.ondeviceorientation = function(event) {
+          alpha = Math.round(event.alpha);
+          beta = Math.round(event.beta);
+          gamma = Math.round(event.gamma);
+          var str = 'alpha: ' + alpha + ' beta: ' + beta + ' gamma: ' + gamma; 
+          socket.emit('directionChange', "Testis");
+        }
+    }
+    </script>
+</body>
+</html>

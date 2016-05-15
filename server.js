@@ -4,6 +4,8 @@ var http = require('http').Server(app);
 var io = require('socket.io').listen(http);
 var fs = require('fs');
 
+/********** Init **********/
+
 // Add headers
 app.use(function(req, res, next) {
 
@@ -24,7 +26,18 @@ app.use(function(req, res, next) {
     next();
 });
 
-var dirs = ["l", "r", "f", "b", "s"];
+/**
+ * All possible directions
+ * l = left, r = right, f = forward
+ * b = backwards, s = stop
+ */
+var directions = ["l", "r", "f", "b", "s"];
+/**
+ * Current direction. This is displayed
+ * on /api/direction at all times
+ */
+var currentDirection = "s";
+
 var listOfBroadcasts = {};
 var initCars = {
     "cars": [{
@@ -42,6 +55,8 @@ var allCars = {
     }]
 };
 
+/********** Routes **********/
+
 /**
  * Serves index.html on route '/'
  */
@@ -49,14 +64,23 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+/**
+ * Get request for current direction
+ */
 app.get('/api/direction', function(req, res){
-    res.send('0123456789' + getRandomDir());
+    res.send('0123456789' + currentDirection);
 });
 
+/**
+ * List of initiated cars
+ */
 app.get('/api/cars', function(req, res) {
     res.json(initCars);
 });
 
+/**
+ * Cars by id
+ */
 app.get('/api/cars/1', function(req, res) {
     res.json({
         "car": initCars.cars[0]
@@ -75,11 +99,23 @@ app.get('/api/cars/3', function(req, res) {
     });
 });
 
+app.get('/test', function(req, res){
+    res.sendFile(__dirname + '/public/test.html');
+});
+
+/**
+ * Serves static files from public folder
+ */
 app.use(express.static('public'));
 
+/**
+ * In case no url is matched, return same as '/'
+ */
 app.use(function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
+
+/********** Sockets **********/
 
 /**
  * Listens to user connect event
@@ -103,15 +139,35 @@ io.on('connection', function(socket) {
         io.sockets.emit('action', msg);
     });
 
+    /**
+     * Takes name of the car as msg
+     * If a car by that name exists
+     * in allCars and that same car
+     * is not yet in initCars, add it
+     */
     socket.on('initcar', function(msg){
         var newCar;
+
         allCars.cars.forEach(function(car){
             if(car.name == msg){
                 if(!initCars.cars.inArray(car))
                     initCars.cars.push(car);
-                console.log(JSON.stringify(initCars));
             }
         });
+    });
+
+    /**
+     * Logs changes in device movement
+     * Turn right = negative alpha
+     * Turn left = positive alpha (no shit sherlock)
+     */
+    socket.on('directionChange', function(msg){
+        /**
+         * If direction changes, change it on /api/direction
+         */
+        if(directions.inArray(msg))
+            changeDirection(msg);
+        console.log(JSON.stringify(msg));
     });
 
     /**
@@ -120,8 +176,9 @@ io.on('connection', function(socket) {
      *
      * l = left; r = right; f = forward; b = back; s = stop
      */
+
     setInterval(function() {
-        var dir = getRandomDir();
+        var dir = getRandomDirection();
 
         io.sockets.emit('action', dir);
     }, 7000);
@@ -137,10 +194,17 @@ http.listen(3000, function() {
  */
 require('./WebRTC-Scalable-Broadcast.js')(io);
 
-function getRandomDir(){
-    return dirs[Math.floor(Math.random() * dirs.length)];
+
+/********** Helpers **********/
+
+function getRandomDirection(){
+    return directions[Math.floor(Math.random() * directions.length)];
 }
 
+function changeDirection(direction){
+    if(directions.inArray(direction))
+        currentDirection = direction;
+}
 
 // check if an element exists in array using a comparer function
 // comparer : function(currentElement)
