@@ -78,7 +78,7 @@ app.get('/api/cars/3', function(req, res) {
 app.use(express.static('public'));
 
 app.use(function(req, res) {
-    res.redirect('/');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 /**
