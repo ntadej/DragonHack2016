@@ -180,6 +180,22 @@ button.button-large {
     color: $medium-grey;
 }
 
+@media (#{$bp-smaller-than-phablet}) {
+    .title {
+        h1 {font-size:5.0rem !important;}
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    #instructions {
+        margin-bottom:20px !important;
+    }
+
+    .footer {
+        margin-top: 10px;
+    }
+}
+
 @media (#{$bp-larger-than-phablet}) {
     .index .title {
         margin-top:160px;

@@ -4,6 +4,14 @@ export default Ember.Route.extend({
   socketIOService: Ember.inject.service('socket-io'),
   settings: Ember.inject.service('settings'),
 
+  onActivate: function() {
+    Ember.$('body').addClass('ddd');
+  }.on('activate'),
+
+  onDeactivate: function() {
+    Ember.$('body').removeClass('ddd');
+  }.on('deactivate'),
+
   setupController: function(controller) {
     const socket = this.get('socketIOService').socketFor(this.get('settings').get('url'));
 
@@ -62,7 +70,7 @@ export default Ember.Route.extend({
               }
             }
           }
-        }
+        };
       }
     });
     controller.set('connection', connection);

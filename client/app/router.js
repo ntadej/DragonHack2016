@@ -12,7 +12,11 @@ Router.map(function() {
       path: ':car_id'
     });
   });
-  this.route('spectator');
+  this.route('spectator', function() {
+    this.route('car', {
+      path: ':car_id'
+    });
+  });
 });
 
 export default Router;

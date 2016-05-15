@@ -2,9 +2,19 @@
     width:50%;
     overflow: hidden;
     float: left;
+    position: relative;
 }
 
 video.driver {
+    position: relative;
     left:50%;
     transform: translateX(-50%);
+}
+
+body.ddd {
+    margin:0;
+}
+
+video.spectator {
+    max-width: 100%;
 }

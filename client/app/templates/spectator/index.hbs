@@ -5,7 +5,7 @@
 <h2>Available cars</h2>
 <div class="ui items">
   {{#each model as |car|}}
-    {{#link-to 'driver.car' car class="button button-primary" }}
+    {{#link-to 'spectator.car' car class="button button-primary" }}
       {{car.name}}
     {{/link-to}}
   {{/each}}
