@@ -12,35 +12,6 @@ var ConnectionInit = function(socket, $, displayCallback) {
     connection.getExternalIceServers = false;
     connection.iceServers = [];
 
-    var desiredVideo;
-    var desiredAudio;
-    connection.getDevices(function(devices) {
-      for (var device in devices) {
-        device = devices[device];
-
-        if (device.kind === 'audio') {
-          desiredAudio = device.id;
-        } else if (device.kind === 'video') {
-          if (!desiredVideo || device.label.indexOf('back') != -1) {
-            desiredVideo = device.id;
-          }
-        }
-
-        // device.kind == 'audio' || 'video'
-        console.log(device.id, device.label);
-      }
-    });
-
-    // select any audio and/or video device
-    connection.selectDevices(desiredVideo, desiredAudio);
-    connection.mediaConstaints.video.optional = [{
-      sourceId: desiredVideo
-    }];
-    connection.mediaConstraints.mandatory = {
-      maxHeight: 480,
-      maxWidth: 640
-    };
-
     connection.body = $('#videos-container');
     connection.channel = connection.sessionid = connection.userid = userid || connection.userid;
     connection.sdpConstraints.mandatory = {
@@ -49,6 +20,32 @@ var ConnectionInit = function(socket, $, displayCallback) {
     };
     // using socket.io for signaling
     connection.openSignalingChannel = function(config) {
+      var desiredVideo;
+      var desiredAudio;
+      connection.getDevices(function(devices) {
+        for (var device in devices) {
+          device = devices[device];
+
+          if (device.kind === 'audio') {
+            desiredAudio = device.id;
+          } else if (device.kind === 'video') {
+            if (!desiredVideo || device.label.indexOf('back') != -1) {
+              desiredVideo = device.id;
+            }
+          }
+
+          // device.kind == 'audio' || 'video'
+          console.log(device.id, device.label);
+        }
+      });
+
+      // select any audio and/or video device
+      connection.selectDevices(desiredVideo);
+      connection.mediaConstraints.mandatory = {
+        maxHeight: 480,
+        maxWidth: 640
+      };
+
       var channel = config.channel || this.channel;
       onMessageCallbacks[channel] = config.onmessage;
       if (config.onopen) {
