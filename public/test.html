@@ -36,7 +36,7 @@
 
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
-    var socket = io("localhost:3000");
+    var socket = io(document.href);
     socket.on('action', function(msg){
       console.log(msg);
     });
