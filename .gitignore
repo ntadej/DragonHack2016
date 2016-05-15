@@ -1,1 +1,5 @@
 node_modules
+public/index.html
+public/assets
+public/crossdomain.xml
+public/robots.txt
