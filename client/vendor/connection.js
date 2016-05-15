@@ -9,12 +9,6 @@ var ConnectionInit = function(socket, $, displayCallback) {
   // initializing RTCMultiConnection constructor.
   function initRTCMultiConnection(userid) {
     var connection = new RTCMultiConnection();
-    connection.mediaConstraints = {
-      mandatory: {
-        maxHeight: 480,
-        maxWidth: 640
-      }
-    }
     connection.getExternalIceServers = false;
     connection.iceServers = [];
 
@@ -39,6 +33,13 @@ var ConnectionInit = function(socket, $, displayCallback) {
 
     // select any audio and/or video device
     connection.selectDevices(desiredVideo, desiredAudio);
+    connection.mediaConstaints.video.optional = [{
+      sourceId: desiredVideo
+    }];
+    connection.mediaConstraints.mandatory = {
+      maxHeight: 480,
+      maxWidth: 640
+    };
 
     connection.body = $('#videos-container');
     connection.channel = connection.sessionid = connection.userid = userid || connection.userid;
