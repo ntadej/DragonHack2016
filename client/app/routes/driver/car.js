@@ -30,7 +30,7 @@ export default Ember.Route.extend({
       controller.get('connection').session = {
         video: true,
         screen: false,
-        audio: true,
+        audio: false,
         oneway: true
       };
 
