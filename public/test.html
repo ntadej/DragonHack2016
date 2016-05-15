@@ -36,6 +36,10 @@
 
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
+    var degreesToChange = 20; // How much does the phone have to turn, to change the direction [°]
+    var firstPositionFlag = true; // Flag to know, if we need to set first position
+    var firstPosition; // First position. Direction change depends on this
+
     var socket = io(document.href);
     socket.on('action', function(msg){
       console.log(msg);
@@ -62,11 +66,11 @@
              * For testing. Writes direction change
              * to server console
              */
-            socket.emit('directionChange', {
+            /*socket.emit('directionChange', {
               "alpha": arAlpha,
               "beta": arBeta,
               "gamma": arGamma
-            });
+            });*/
 
             /**
              * For production.
@@ -85,8 +89,30 @@
           alpha = Math.round(event.alpha);
           beta = Math.round(event.beta);
           gamma = Math.round(event.gamma);
+
+          if(firstPositionFlag){
+            firstPositionFlag = false;
+            firstPosition = {
+              "alpha": alpha,
+              "beta": beta,
+              "gamma": gamma
+            }
+          }else if(parseInt(firstPosition.alpha) < parseInt(alpha) - degreesToChange){
+            socket.emit('directionChange', 'l');
+          }else if(parseInt(firstPosition.alpha) > parseInt(alpha) + degreesToChange){
+            socket.emit('directionChange', 'r');
+          }else{
+            socket.emit('directionChange', 'f');
+          }
+          /*
+          socket.emit('directionChange', JSON.stringify({
+            "first alpha: ": firstPosition.alpha,
+            "now alpha: ": alpha
+          }));
+          */
+
           var str = 'alpha: ' + alpha + ' beta: ' + beta + ' gamma: ' + gamma; 
-          socket.emit('directionChange', "Testis");
+          //socket.emit('directionChange', str);
         }
     }
     </script>
