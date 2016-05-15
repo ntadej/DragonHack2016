@@ -1,5 +1,16 @@
+<div class="title">
+  <h1><a href="/">Drive the Dragon</a></h1>
+</div>
+
+<h2>Available cars</h2>
 <div class="ui items">
   {{#each model as |car|}}
-    {{car.name}}
+    {{#link-to 'driver.car' car class="button button-primary" }}
+      {{car.name}}
+    {{/link-to}}
   {{/each}}
+</div>
+
+<div class="container footer">
+  <a href="/about"><i class="fa fa-code"></i> with <i class="fa fa-heart"></i> by PyPhy+Dev</a>
 </div>

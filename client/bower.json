@@ -7,6 +7,7 @@
     "ember-qunit-notifications": "0.1.0",
     "Skeleton-Sass": "skeleton-scss#*",
     "uri.js": "^1.18.0",
-    "socket.io-client": "^1.4.6"
+    "socket.io-client": "^1.4.6",
+    "font-awesome": "~4.5.0"
   }
 }

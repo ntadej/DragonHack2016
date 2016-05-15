@@ -1,0 +1,52 @@
+// Breakpoints
+$bp-mobile                : "max-width: 399px" !default;
+$bp-larger-than-mobile    : "min-width: 400px" !default;
+$bp-smaller-than-phablet  : "max-width: 549px" !default;
+$bp-larger-than-phablet   : "min-width: 550px" !default;
+$bp-smaller-than-tablet   : "max-width: 749px" !default;
+$bp-larger-than-tablet    : "min-width: 750px" !default;
+$bp-larger-than-desktop   : "min-width: 1000px" !default;
+$bp-larger-than-desktophd : "min-width: 1200px" !default;
+
+// Colors
+$light-grey       : #e1e1e1 !default;
+$dark-grey        : #333 !default;
+$primary-color    : #36802d !default;
+$medium-grey      : #999 !default;
+$secondary-color  : lighten($dark-grey, 13.5%) !default;
+$hover-color      : #77ab59 !default;
+$highlight-color  : #c9df8a !default;
+$highlight-color2 : #f0f7da !default;
+$border-color     : #bbb !default;
+$link-color       : $primary-color !default;
+$link-hover-color : $hover-color !default;
+$font-color       : #234d20 !default;
+
+// Typography
+$font-family          : Helvetica Neue, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-headings : $font-family;
+
+//Grid Variables
+$container-width                     : 920px !default;
+$container-width-larger-than-mobile  : 85% !default;
+$container-width-larger-than-phablet : 80% !default;
+$total-columns                       : 12 !default;
+$column-width                        : 100 / $total-columns !default; // calculates individual column width based off of # of columns
+$column-margin                       : 4% !default; // space between columns
+
+// Misc
+$global-radius : 0px !default;
+$navbar-height : 6.5rem;
+
+$button-height        : 3.8rem;
+$button-padding       : 3rem;
+$button-large-height  : 5.6rem;
+$button-large-padding : 5rem;
+
+// Import files
+@import
+    "skeleton",
+    "mixins",
+    "dark",
+    "video"
+;

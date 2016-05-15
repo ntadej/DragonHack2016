@@ -1,3 +1,187 @@
-@import "skeleton";
-@import "dark";
-@import "video";
+@import "main";
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    background: lighten($highlight-color2, 5%);
+    text-align: center;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1.5rem;
+    font-family: $font-family-headings;
+    font-weight: 300;
+}
+
+h1 { font-size: 7.0rem; line-height: 1.2;  letter-spacing: -.2rem;  }
+h2 { font-size: 3.0rem; line-height: 1.25; letter-spacing: -.1rem;  }
+h3 { font-size: 2.4rem; line-height: 1.3;  letter-spacing: -.1rem;  }
+h4 { font-size: 1.8rem; line-height: 1.35; letter-spacing: -.08rem; }
+h5 { font-size: 1.5rem; line-height: 1.5;  letter-spacing: -.05rem; }
+h6 { font-size: 1.2rem; line-height: 1.6;  letter-spacing: 0;       }
+
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;
+}
+
+:-ms-input-placeholder {
+   text-align: center;
+}
+
+// Larger than phablet
+@media (#{$bp-larger-than-phablet}) {
+	h1 { font-size: 9.0rem; }
+	h2 { font-size: 3.6rem; }
+	h3 { font-size: 3.0rem; }
+	h4 { font-size: 2.4rem; }
+	h5 { font-size: 1.8rem; }
+	h6 { font-size: 1.5rem; }
+}
+
+// Links
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+
+a {
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    @include transition-button();
+}
+
+// Buttons
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+
+.button,
+button {
+    font-size: 1.8rem;
+    font-weight: 400;
+    font-family: $font-family-headings;
+    padding: 0 2rem;
+    text-transform: none;
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    @include transition-button();
+}
+
+input {
+    &[type="submit"],
+    &[type="reset"],
+    &[type="button"] {
+        font-size: 1.8rem;
+        font-weight: 400;
+        font-family: $font-family-headings;
+        padding: 0 2rem;
+        text-transform: none;
+
+        &:hover {
+            text-decoration: none;
+        }
+
+        @include transition-button();
+    }
+}
+
+.button.button-primary,
+button.button-primary {
+    background-color: $hover-color;
+    border-color: $hover-color;
+
+    &:hover,
+    &:focus {
+        color: $hover-color;
+        background-color: #fff;
+        border-color: $hover-color;
+    }
+}
+
+input {
+    &[type="submit"].button-primary,
+    &[type="reset"].button-primary,
+    &[type="button"].button-primary {
+        background-color: $hover-color;
+        border-color: $hover-color;
+
+        &:hover,
+        &:focus {
+            color: $hover-color;
+            background-color: #fff;
+            border-color: $hover-color;
+        }
+    }
+}
+
+.button.button-large,
+button.button-large {
+    height: $button-large-height;
+    padding: 0 $button-large-padding;
+    font-size: 2.2rem;
+    font-weight: 500;
+    line-height: $button-large-height;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.title {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+
+    @include transition(margin-top 0.4s);
+
+    h1 {
+        font-weight: 100;
+    }
+}
+
+#instructions {
+    margin: 0 auto;
+            width:80%;
+        max-width:600px;
+        margin-bottom:40px;
+}
+
+.clear {
+    clear: both;
+}
+
+.footer {
+    margin-top: 40px;
+    font-size: 1.4rem;
+    text-align: center;
+    margin-bottom: 10px;
+
+    a, a:hover {
+        color: $medium-grey !important;
+    }
+}
+
+.info {
+    text-align: center;
+    font-style: italic;
+    color: $medium-grey;
+}
+
+@media (#{$bp-larger-than-phablet}) {
+    .index .title {
+        margin-top:160px;
+    }
+}

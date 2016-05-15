@@ -1,16 +1,24 @@
 <div class="container">
-  <h1>WIP</h1>
+  <div class="title">
+    <h1><a href="/">Drive the Dragon</a></h1>
+  </div>
 
-  <h2>Choose your role:</h2>
+  <div id="instructions" class="info">
+    Have you ever wished drive a car from the comfort of your home? Use your phone and cardboard and do it now! (choose your role below)
+  </div>
 
-  {{#link-to 'spectator' class="button" }}
+  {{#link-to 'spectator' class="button button-primary" }}
     Spectator
   {{/link-to}}
 
-  {{#link-to 'driver' class="button" }}
+  {{#link-to 'driver' class="button button-primary" }}
     Driver
   {{/link-to}}
 
   {{outlet}}
+
+  <div class="container footer">
+    <a href="/about"><i class="fa fa-code"></i> with <i class="fa fa-heart"></i> by PyPhy+Dev</a>
+  </div>
 
 </div>
