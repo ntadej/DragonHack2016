@@ -19,9 +19,7 @@ export default Ember.Route.extend({
 
   actions: {
     didTransition: function() {
-      window.setTimeout(function() {
-        this.send('openOrJoin');
-      }.bind(this), 5000);
+      this.send('openOrJoin');
     },
     openOrJoin: function() {
       const socket = this.get('socketIOService').socketFor(this.get('settings').get('url'));

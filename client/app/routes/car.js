@@ -7,7 +7,12 @@ export default Ember.Route.extend({
   setupController: function(controller) {
     const socket = this.get('socketIOService').socketFor(this.get('settings').get('url'));
 
-    let connection = ConnectionInit(socket, Ember.$, function() {});
+    let connection = ConnectionInit(socket, Ember.$, function(event) {
+      let video = $(event.mediaElement);
+      let container = Ember.$('#videos-container');
+
+      container.append('<video class="car" src="' + video.attr('src') + '" autoplay></video>');
+    });
     controller.set('connection', connection);
   },
 
